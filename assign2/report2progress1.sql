@@ -1,0 +1,4 @@
+﻿with a as (select cust as customer, prod as product, month as this_month, avg(quant) as this_avg from sales group by cust, prod, month order by cust, month),
+b as (select cust, prod, month as before_month, avg(quant) as before_avg from sales group by cust, prod, month order by cust, month),
+c as (select cust, prod, month as after_month, avg(quant) as after_avg from sales group by cust, prod, month )
+select a.customer, a.product, this_month, before_avg, after_avg from (a natural full outer join b) natural full outer join c where a.customer=b.cust and a.product=b.prod and this_month-1=before_month and a.customer=c.cust and a.product=c.prod and this_month+1=after_month 
